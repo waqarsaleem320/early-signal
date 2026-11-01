@@ -27,6 +27,7 @@ function review(s) {
   if (s.cfu_per_g) {
     const t = s.cfu_per_g.trim();
     if (["", "NULL", "None", "nan"].includes(t)) cls = "none";
+    else if (/^>[0-9]+(\.[0-9]+)?$/.test(t) && parseFloat(t.slice(1)) >= 1) { cls = "quantified"; num = parseFloat(t.slice(1)); }
     else if (t.startsWith("<") || t.startsWith(">")) cls = "censored";
     else if (/^[0-9]+(\.[0-9]+)?$/.test(t)) { cls = "quantified"; num = parseFloat(t); }
     else cls = "none";
@@ -141,7 +142,7 @@ export function compareActions(s, D, detect = DEFAULTS.detect, donate = DEFAULTS
     row("Release raw under normal HACCP", 1, 1, 0, !blocked, "Normal route. Raw poultry is cooked by the end user."),
     row("Release raw, add verification", 1, 1, 0, !blocked, "More sampling and intervention checks. Exposure effect not estimated."),
     row("Hold and test, cook any positives", 1 - detect, 1, 0, inLimit && !adulterated && (line || hold),
-      `About 2 days of shelf life used (placeholder). Assumes the test finds ${pct0(detect)} of positive lots. ` +
+      `About 2 days of shelf life used (assumed). Assumes the test finds ${pct0(detect)} of positive lots. ` +
       "A large lot is more likely to contain Salmonella than one sample suggests."),
     row("Redirect to validated cooked line", 0, 1, 0, line && inLimit, LETHALITY),
     row("Redirect to cooked line, donate part", 0, 1, donate, line && inLimit,

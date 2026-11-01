@@ -82,7 +82,7 @@ function count(el, to, fmt) {
 
 let lastPick = "";
 function render() {
-  const s = { ...ui.s, cfu_per_g: ui.s.cfu_per_g || null };
+  const s = { ...ui.s, cfu_per_g: ui.s.cfu_per_g || null, max_hours_above_40f: ui.s.max_hours_above_40f > 0 ? ui.s.max_hours_above_40f : E.DEFAULTS.maxHours };
   const P = D.products[s.product], std = D.fsisStandard[P.group];
   const risk = E.riskLevel(s, D), [pick, reason] = E.recommend(s, D);
   const table = E.compareActions(s, D, ui.detect, ui.donate), chosen = table.find(r => r.action === pick);
@@ -98,7 +98,7 @@ function render() {
   tag.style.setProperty("--level", LEVEL[risk.level]);
   $("level").textContent = `${risk.level} risk`;
   $("action").textContent = pick;
-  $("reason").textContent = reason;
+  $("reason").textContent = reason + (s.lot_result === "detected" && s.customer_limit && pick.startsWith("Release") ? " " + SPEC : "");
   if (pick !== lastPick) { tag.classList.remove("changed"); void tag.offsetWidth; tag.classList.add("changed"); lastPick = pick; }
 
   const top = Math.max(std * 2, risk.pct * 1.12, (own || 0) * 1.12), x = v => 100 * v / top;
@@ -107,7 +107,7 @@ function render() {
   $("pinOwn").hidden = own == null; $("ownLabel").hidden = own == null;
   if (own != null) { $("pinOwn").style.left = `${x(own)}%`; $("ownLabel").textContent = `Blue marker: your samples, ${own.toFixed(1)}%`; }
   $("tickHalf").style.left = `${x(std / 2)}%`; $("tickHalf").textContent = `Half ${std / 2}%`;
-  $("tickStd").style.left = `${x(std)}%`; $("tickStd").textContent = `FSIS standard ${std}%`;
+  $("tickStd").style.left = `${x(std)}%`; $("tickStd").textContent = `${s.product === "Raw breaded stuffed chicken" ? "Chicken parts standard, stand-in" : "FSIS standard"} ${std}%`;
   // The interval comes from the same table as the rate, so it only shows for category-based rates.
   const iv = interval(s, check, P.group);
   $("range").hidden = !iv;
@@ -117,8 +117,10 @@ function render() {
     (iv ? `, 95% range ${iv.ci_low.toFixed(1)} to ${iv.ci_high.toFixed(1)}` : "") +
     (near ? ` <span class="near">Borderline</span>` : "");
   $("gauge").setAttribute("aria-label", `Expected positivity ${risk.pct} percent, FSIS standard ${std} percent`);
-  $("printmeta").textContent = `${s.product}, ${num(s.lot_lb)} lb, ${D.stateNames[s.state]}. Printed ` +
-    `${new Date().toLocaleDateString("en-US")}. Decision support, not a regulatory determination. Reviewed by: ____________`;
+  $("printmeta").textContent = `${s.product}, ${num(s.lot_lb)} lb, ${D.stateNames[s.state]}. ` +
+    `FSIS category: ${s.fsis_category ?? "none"}. Lot screen: ${s.lot_result === "none" ? "none" : s.lot_result}` +
+    `${s.cfu_per_g ? `, ${s.cfu_per_g} CFU/g` : ""}. Hours above 40°F: ${s.hours_above_40f} (limit ${s.max_hours_above_40f}). ` +
+    `Printed ${new Date().toLocaleDateString("en-US")}. Decision support, not a regulatory determination. Reviewed by: ____________`;
 
   count($("oExp"), chosen.exposure_index, v => v.toFixed(2));
   count($("oServ"), chosen.servings_kept, num);
@@ -144,6 +146,8 @@ function stateCard(k) {
     <dt>Storm months</dt><dd>${storm} of 12 years</dd></dl>`;
 }
 
+const SPEC = "This lot screened positive and a buyer's specification applies, so check the specification before shipping.";
+
 function nextSteps(pick, s) {
   const cooked = ["Confirm this product is covered by a validated cooked process in your HACCP plan.",
     "Meet the 7-log10 lethality and stabilization requirements (9 CFR 381.150), or a validated equivalent.",
@@ -158,6 +162,7 @@ function nextSteps(pick, s) {
     "Redirect to cooked line, donate part": [...cooked, "Confirm capacity and cold chain with the receiving food organization."],
     "Discard or render": ["Hold the lot and document the deviation in your HACCP records.", "Have your process authority confirm the disposition.", "Follow your plan for disposal or rendering."],
   }[pick];
+  if (s.lot_result === "detected" && s.customer_limit && pick.startsWith("Release")) steps.unshift(SPEC);
   if (pick === "Release raw, add verification" && !s.has_cooked_line) steps.push("If risk stays high, ask a co-packer about a validated cook.");
   return steps;
 }
@@ -184,7 +189,7 @@ const PANELS = {
       <div class="plate"><h3>What drove this</h3><ul class="reasons">${
       risk.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>${noteHtml}
       <p class="note">Salmonella-positive raw poultry is generally not adulterated. The exception is the narrow
-      2024 determination for raw breaded stuffed chicken, where FSIS verification sampling is delayed.</p></div>
+      2024 determination for raw breaded stuffed chicken, where FSIS <a href="https://www.federalregister.gov/d/2025-21737">delayed verification sampling</a>.</p></div>
       ${self}<div class="plate"><h3>${esc(D.stateNames[s.state])}, ${esc(L.period)}</h3>
       <p>About <b>${Math.round(L.expected_cases)}</b> poultry-associated human cases expected (80% range
       ${Math.round(L.low_80)} to ${Math.round(L.high_80)}; three-year average ${Math.round(L.baseline_3y)}),
@@ -194,13 +199,13 @@ const PANELS = {
   compare() {
     const { table, pick, P } = ui.ctx;
     const mE = Math.max(...table.map(r => r.exposure_index), .01), mS = Math.max(...table.map(r => r.servings_kept), 1);
-    const bar = (v, m, t) => `<span class="bar"><i style="width:${Math.round(70 * v / m)}px"></i>${t}</span>`;
+    const bar = (v, m, t, l) => `<span class="bar" data-l="${l}"><i style="width:${Math.round(70 * v / m)}px"></i>${t}</span>`;
     return `<p class="lead">Every option on the same outcomes. Select a row for its conditions.</p>
       <div class="opthead"><span>Option</span><span>Exposure index</span><span>Servings kept</span><span>To high-need counties</span><span>Food lost</span></div>` +
       table.map(r => `<details class="opt ${r.action === pick ? "pick" : r.feasible ? "" : "no"}"><summary>
         <span class="name">${esc(r.action)}${r.feasible ? "" : " (not possible here)"}</span>
-        ${bar(r.exposure_index, mE, r.exposure_index.toFixed(2))}${bar(r.servings_kept, mS, num(r.servings_kept))}
-        <span>${num(r.servings_to_need)}</span><span>${Math.round(r.food_lost_pct)}%</span></summary><p>${esc(r.note)}</p></details>`).join("") +
+        ${bar(r.exposure_index, mE, r.exposure_index.toFixed(2), "Exposure index")}${bar(r.servings_kept, mS, num(r.servings_kept), "Servings kept")}
+        <span data-l="To high-need counties">${num(r.servings_to_need)}</span><span data-l="Food lost">${Math.round(r.food_lost_pct)}%</span></summary><p>${esc(r.note)}</p></details>`).join("") +
       `<p class="note">Exposure index: national chicken parts sold raw = 1.0, scaled by what lines in your FSIS category
       measured the following year. It is relative, not a count of illnesses. ${esc(P.note)}</p>`;
   },
@@ -282,7 +287,7 @@ function chart(rows) {
     const bars = rs.map((r, j) => {
       const cx = 48 + j * 77, v = r.pct_positive_next_year;
       const tip = `${esc(g)}, Category ${r.category}: ${v}% positive. ${r.plants} plants, ${num(r.samples)} samples`;
-      return `<g class="b" data-tip="${tip}" tabindex="0" aria-label="${tip}"><rect x="${cx - bw / 2}" y="${y(v)}" width="${bw}" height="${base - y(v)}" rx="3" fill="${CAT[r.category - 1]}"/>
+      return `<g class="b" data-tip="${tip}" tabindex="0" role="img" aria-label="${tip}"><rect x="${cx - bw / 2}" y="${y(v)}" width="${bw}" height="${base - y(v)}" rx="3" fill="${CAT[r.category - 1]}"/>
         <path d="M${cx} ${y(r.ci_low)}V${y(r.ci_high)}M${cx - 4} ${y(r.ci_low)}h8M${cx - 4} ${y(r.ci_high)}h8" stroke="#12343B" fill="none"/>
         <text x="${cx}" y="${y(r.ci_high) - 6}" text-anchor="middle" font-size="14" font-weight="600">${Math.round(v)}%</text>
         <text x="${cx}" y="${base + 18}" text-anchor="middle" font-size="13">Cat ${r.category}</text></g>`;
@@ -299,12 +304,13 @@ function select(tab, focus) {
   document.querySelectorAll(".tabs button").forEach(b => {
     const on = b.dataset.t === tab;
     b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1;
-    if (on) { $("ink").style.left = `${b.offsetLeft}px`; $("ink").style.width = `${b.offsetWidth}px`; if (focus) b.focus(); }
+    if (on) { $("ink").style.left = `${b.offsetLeft}px`; $("ink").style.width = `${b.offsetWidth}px`; $("panel").setAttribute("aria-label", b.textContent); if (focus) b.focus(); }
   });
   render();
 }
 const tabs = [...document.querySelectorAll(".tabs button")];
 tabs.forEach((b, i) => {
+  b.setAttribute("aria-controls", "panel");
   b.onclick = () => select(b.dataset.t);
   b.onkeydown = e => {
     const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
@@ -314,7 +320,7 @@ tabs.forEach((b, i) => {
 
 $("panel").addEventListener("click", e => {
   const st = e.target.closest?.("[data-state]"), cs = e.target.closest?.("[data-case]");
-  if (st) { ui.s.state = st.dataset.state; ui.active = null; $("tip").hidden = true; fillForm(); render(); }
+  if (st) { ui.s.state = st.dataset.state; ui.active = null; $("tip").hidden = true; fillForm(); render(); $("panel").querySelector(`.tile[data-state="${st.dataset.state}"]`)?.focus(); }
   if (cs) openCase(Number(cs.dataset.case));
 });
 

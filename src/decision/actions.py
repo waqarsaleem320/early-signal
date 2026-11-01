@@ -320,7 +320,7 @@ def compare_actions(s: Situation, inp: dict, test_detection: float = TEST_DETECT
             "More sampling and intervention checks. Exposure effect not estimated."),
         row("Hold and test, cook any positives", 1 - test_detection, 1, 0,
             in_limit and not adulterated and (line or hold),
-            f"About {HOLD_DAYS} days of shelf life used (placeholder). Assumes the test finds "
+            f"About {HOLD_DAYS} days of shelf life used (assumed). Assumes the test finds "
             f"{test_detection:.0%} of positive lots. A large lot is more likely to contain "
             "Salmonella than one sample suggests."),
         row("Redirect to validated cooked line", 0, 1, 0, line and in_limit, LETHALITY),

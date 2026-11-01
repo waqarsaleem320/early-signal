@@ -128,6 +128,9 @@ def interpret_measurement(det: DetectionResult):
     s = (det.cfu_per_g_raw or "").strip()
     if s in ("", "NULL", "None", "nan"):
         return (M_NONE, None, "No quantitative value provided.")
+    if re.fullmatch(r">[0-9]+(\.[0-9]+)?", s) and float(s[1:]) >= ADULTERANT_THRESHOLD_CFU_G:
+        return (M_QUANTIFIED, float(s[1:]),
+                f"Lower bound: {s} CFU/g (source: {det.source}). At or above 1 CFU/g.")
     if s.startswith("<") or s.startswith(">"):
         return (M_CENSORED, None,
                 f"Censored value '{s}' (source: {det.source}). A detection/"

@@ -54,7 +54,7 @@
         <h2>What should happen to this lot?</h2>
         <p>Enter the lot details. The recommendation updates as you type.</p>
       </div>
-      <button class="print" id="print" type="button">Print hold tag</button>
+      <button class="print" id="print" type="button">Print lot tag</button>
     </header>
     <div class="examples"><span>Try a case</span><div id="examples"></div></div>
 
@@ -63,9 +63,9 @@
         <div class="lvl" id="level"></div>
         <h1 id="action"></h1>
         <p id="reason"></p>
-        <div class="gauge" role="img" id="gauge">
+        <div class="gauge">
           <div class="readout" id="readout"></div>
-          <div class="track"><i id="z1"></i><i id="z2"></i><i id="z3"></i>
+          <div class="track" role="img" id="gauge"><i id="z1"></i><i id="z2"></i><i id="z3"></i>
             <s class="range" id="range" hidden></s><b class="pin" id="pin"></b><b class="pin own" id="pinOwn" hidden></b></div>
           <div class="scale"><span id="tickHalf"></span><span id="tickStd"></span></div>
           <div class="own" id="ownLabel" hidden></div>
@@ -95,6 +95,16 @@
       support, not a regulatory determination, and it authorizes nothing. A qualified person reviews every
       high-consequence decision. FSIS states its sampling data should not be used to identify outbreaks, link
       samples to outbreaks, or show that samples are causally related.
+      <nav class="links" aria-label="Sources and project files">
+        <a href="https://github.com/waqarsaleem320/early-signal#readme">How it works</a>
+        <a href="https://github.com/waqarsaleem320/early-signal">Code</a>
+        <a href="https://github.com/waqarsaleem320/early-signal/blob/main/DATA_DICTIONARY.md">Data dictionary</a>
+        <a href="data.json" download="poultryrescue-numbers.json">Download the numbers</a>
+        <a href="https://www.fsis.usda.gov/science-data/data-sets-visualizations/laboratory-sampling-data">FSIS sampling data</a>
+        <a href="https://www.govinfo.gov/content/pkg/FR-2016-02-11/html/2016-02586.htm">FSIS category rule</a>
+        <a href="https://www.govinfo.gov/content/pkg/FR-2024-05-01/html/2024-09393.htm">Breaded stuffed chicken determination</a>
+        <a href="https://www.federalregister.gov/d/2025-21737">Delayed verification notice</a>
+      </nav>
     </footer>
   </main>
 </div>

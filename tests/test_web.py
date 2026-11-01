@@ -38,7 +38,7 @@ def cases(inp) -> list[dict]:
     out = []
     grid = itertools.product(A.PRODUCTS, (None, 1, 2, 3), ("none", "negative", "detected"), (False, True),
                              (False, True), (0.0, 2.0, 6.0), ((0, 0), (5, 1), (40, 11), (20, 0), (10, 12)),
-                             (None, "0.5", "2.0", "<10", "abc"))
+                             (None, "0.5", "2.0", "<10", ">5", ">0.5", "abc"))
     for product, cat, result, line, spec, hours, (n, k), cfu in grid:
         if cfu and product != "Raw breaded stuffed chicken":
             continue

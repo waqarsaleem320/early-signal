@@ -70,6 +70,12 @@ def test_covered_screen_positive_is_held_not_released(inp, kw, line):
     assert t.loc["Hold and test, cook any positives", "feasible"]
 
 
+def test_lower_bound_at_threshold_is_adulterated():
+    det = sr.DetectionResult(kind="quantitative", cfu_per_g_raw=">5")
+    r = sr.review(sr.ReviewInput("x", "raw breaded stuffed chicken", det, sr.ADULTERANT_FRAMEWORK))
+    assert r.must_not_enter_commerce_as_is
+
+
 def test_censored_value_is_not_quantified():
     r = sr.review(sr.ReviewInput("x", "raw breaded stuffed chicken",
                                  sr.DetectionResult(kind="quantitative", cfu_per_g_raw="<10"),
