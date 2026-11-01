@@ -1,0 +1,13 @@
+target,split,rule,threshold,state_months,alerts,alert_rate,surge_rate,precision,recall,false_alarms
+poultry_serotypes,tune_2022_2023,recent_ratio,1.683,1200,120,0.1,0.306,0.367,0.12,76
+poultry_serotypes,test_2024_on,recent_ratio,1.683,1600,110,0.069,0.259,0.291,0.077,78
+poultry_serotypes,tune_2022_2023,forecast_ratio,1.385,1200,120,0.1,0.306,0.642,0.21,43
+poultry_serotypes,test_2024_on,forecast_ratio,1.385,1600,158,0.099,0.259,0.538,0.205,73
+enteritidis,tune_2022_2023,recent_ratio,1.936,1200,120,0.1,0.33,0.4,0.121,72
+enteritidis,test_2024_on,recent_ratio,1.936,1600,97,0.061,0.281,0.351,0.076,63
+enteritidis,tune_2022_2023,forecast_ratio,1.478,1200,120,0.1,0.33,0.717,0.217,34
+enteritidis,test_2024_on,forecast_ratio,1.478,1600,152,0.095,0.281,0.625,0.212,57
+all_salmonella,tune_2022_2023,recent_ratio,1.442,1200,120,0.1,0.254,0.325,0.128,81
+all_salmonella,test_2024_on,recent_ratio,1.442,1600,140,0.087,0.251,0.314,0.11,96
+all_salmonella,tune_2022_2023,forecast_ratio,1.336,1200,120,0.1,0.254,0.483,0.19,62
+all_salmonella,test_2024_on,forecast_ratio,1.336,1600,168,0.105,0.251,0.369,0.155,106

@@ -1,0 +1,16 @@
+target,model,MAE,gain_vs_best_baseline_pct
+poultry_serotypes,seasonal_naive,8.545,-18.4
+poultry_serotypes,climatology_3y,8.468,-17.3
+poultry_serotypes,season_glm,7.217,0.0
+poultry_serotypes,m0,6.849,5.1
+poultry_serotypes,m1,6.951,3.7
+enteritidis,seasonal_naive,6.56,-18.1
+enteritidis,climatology_3y,6.729,-21.2
+enteritidis,season_glm,5.554,0.0
+enteritidis,m0,5.217,6.1
+enteritidis,m1,5.248,5.5
+all_salmonella,seasonal_naive,17.023,0.0
+all_salmonella,climatology_3y,17.563,-3.2
+all_salmonella,season_glm,17.504,-2.8
+all_salmonella,m0,14.962,12.1
+all_salmonella,m1,15.438,9.3

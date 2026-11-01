@@ -1,0 +1,15 @@
+# Streamlit configuration for Early Signal (local + Streamlit Community Cloud).
+
+[theme]
+primaryColor = "#2B7A9E"
+backgroundColor = "#EDF2F3"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#12343B"
+font = "sans serif"
+
+[server]
+headless = true
+# Streamlit Cloud manages CORS/XSRF and the port; no manual overrides needed.
+
+[browser]
+gatherUsageStats = false

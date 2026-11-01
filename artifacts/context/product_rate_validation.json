@@ -1,0 +1,6 @@
+{
+  "test_samples": 66410,
+  "overall_rate_train": 0.0813,
+  "brier_overall": 0.07949,
+  "brier_product_season": 0.07559
+}

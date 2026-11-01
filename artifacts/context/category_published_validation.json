@@ -1,0 +1,12 @@
+{
+  "test_window_start": "2025-07-27",
+  "test_samples": 22084,
+  "test_line_years": 661,
+  "brier_product_only": 0.07286,
+  "brier_product_and_category": 0.0697,
+  "improvement_pct": 4.3,
+  "improvement_ci": [
+    2.9,
+    6.0
+  ]
+}

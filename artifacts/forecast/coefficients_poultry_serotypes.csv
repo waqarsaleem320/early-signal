@@ -1,0 +1,12 @@
+feature,label,rate_ratio,ci_low,ci_high,p_value
+log_lag1,Cases last month (log),1.3758,1.3353,1.4176,0.0
+log_lag12,Cases same month last year (log),1.1092,1.0798,1.1394,0.0
+trend,Long-term trend (per year since 2018),1.0373,1.0307,1.0439,0.0
+covid,COVID period (Mar 2020–Jun 2021),0.8548,0.8287,0.8816,0.0
+fsis_nat_sero,"FSIS national positivity for the target serotypes (ratio to mean), last month",1.0605,0.9822,1.1451,0.1335
+fsis_state_oe,"FSIS state raw-poultry O/E, last 3 months (shrunk)",1.0644,1.0075,1.1245,0.0259
+tmax_anom,Max-temperature anomaly last month (°F),1.0033,1.0001,1.0065,0.0425
+precip_anom,Precipitation anomaly last month (in),0.9977,0.9899,1.0056,0.5665
+log_storm_heat,Heat events last month (log),0.9985,0.9906,1.0064,0.704
+log_storm_flood,Flood/tropical events last month (log),1.005,0.9968,1.0133,0.2332
+log_storm_damage,Storm damage last month (log $M),1.0046,0.9974,1.0119,0.207

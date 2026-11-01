@@ -1,0 +1,11 @@
+product_group,season,samples,positives,pct_positive,ci_low,ci_high
+Chicken carcass,May-Oct,14328,764,5.3,5.0,5.7
+Chicken carcass,Nov-Apr,13736,686,5.0,4.6,5.4
+Chicken parts,May-Oct,22733,1935,8.5,8.2,8.9
+Chicken parts,Nov-Apr,22167,1835,8.3,7.9,8.6
+Ground chicken,May-Oct,2220,691,31.1,29.2,33.1
+Ground chicken,Nov-Apr,1981,711,35.9,33.8,38.0
+Ground turkey,May-Oct,1802,327,18.1,16.4,20.0
+Ground turkey,Nov-Apr,1644,295,17.9,16.2,19.9
+Turkey carcass,May-Oct,1391,3,0.2,0.1,0.6
+Turkey carcass,Nov-Apr,1015,7,0.7,0.3,1.4

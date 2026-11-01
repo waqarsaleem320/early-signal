@@ -1,0 +1,8 @@
+{
+  "beam_complete_through": "2026-08",
+  "fsis": "2026-06",
+  "climate": "2026-09",
+  "storms": "2026-07",
+  "storms_note": "storm month not yet published; treated as no events",
+  "next_period": "2026-09"
+}

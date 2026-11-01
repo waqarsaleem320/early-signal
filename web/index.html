@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Early Signal</title>
+<meta name="description" content="Salmonella lot decisions for small ground poultry plants.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@85,500;85,700;85,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="rail" aria-label="Lot details">
+    <div class="logo"><span class="mark" aria-hidden="true"></span>Early Signal</div>
+    <form id="lot" autocomplete="off">
+      <h2>This lot</h2>
+      <label class="field">Plant state<select data-k="state" id="state"></select></label>
+      <label class="field">Product<select data-k="product" id="product"></select></label>
+      <label class="field">Lot size (lb)<input data-k="lot_lb" type="number" min="100" max="500000" step="500"></label>
+
+      <fieldset class="seg" id="cat"><legend>Published FSIS category</legend></fieldset>
+      <fieldset class="seg" id="screen"><legend>Lot screen</legend></fieldset>
+      <label class="field" id="cfuField" hidden>Quantified result (CFU/g)<input data-k="cfu_per_g" type="text" inputmode="decimal" placeholder="e.g. 2.0 or &lt;10"></label>
+
+      <label class="switch"><input data-k="has_cooked_line" type="checkbox"><i></i>Validated cooked line</label>
+      <label class="switch"><input data-k="customer_limit" type="checkbox"><i></i>Buyer's Salmonella specification</label>
+
+      <div class="pair">
+        <label class="field">Hours above 40°F<input data-k="hours_above_40f" type="number" min="0" max="72" step="0.5"></label>
+        <label class="field">HACCP limit (hours)<input data-k="max_hours_above_40f" type="number" min="0.5" max="24" step="0.5"></label>
+      </div>
+
+      <details>
+        <summary>Check your own FSIS results</summary>
+        <div class="pair">
+          <label class="field">Samples, last 52 weeks<input data-k="plant_samples" type="number" min="0" step="1"></label>
+          <label class="field">Positives<input data-k="plant_positives" type="number" min="0" step="1"></label>
+        </div>
+      </details>
+      <details>
+        <summary>Change the assumptions</summary>
+        <label class="field">Share donated after cooking <output id="donateOut"></output><input id="donate" type="range" min="0" max="100" step="5"></label>
+        <label class="field">Positives the test finds <output id="detectOut"></output><input id="detect" type="range" min="50" max="100" step="5"></label>
+      </details>
+    </form>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div class="examples"><span>Try a case</span><div id="examples"></div></div>
+      <button class="print" id="print" type="button">Print hold tag</button>
+    </header>
+
+    <section class="hero">
+      <article class="tag" id="tag" aria-live="polite">
+        <div class="lvl" id="level"></div>
+        <h1 id="action"></h1>
+        <p id="reason"></p>
+        <div class="gauge" role="img" id="gauge">
+          <div class="readout" id="readout"></div>
+          <div class="track"><i id="z1"></i><i id="z2"></i><i id="z3"></i>
+            <b class="pin" id="pin"></b><b class="pin own" id="pinOwn" hidden></b></div>
+          <div class="scale"><span id="tickHalf"></span><span id="tickStd"></span></div>
+          <div class="own" id="ownLabel" hidden></div>
+        </div>
+        <div class="printmeta" id="printmeta"></div>
+      </article>
+      <dl class="outcome" aria-label="Outcome of the recommended action">
+        <div><dt>Exposure index</dt><dd id="oExp"></dd><small>Chicken parts sold raw = 1.0</small></div>
+        <div><dt>Servings kept</dt><dd id="oServ"></dd><small id="oProt"></small></div>
+        <div><dt>Servings to high-need counties</dt><dd id="oNeed"></dd><small id="oNeedNote"></small></div>
+      </dl>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Details">
+      <button role="tab" data-t="why">Why this call</button>
+      <button role="tab" data-t="compare">Compare options</button>
+      <button role="tab" data-t="donate">Donated meals</button>
+      <button role="tab" data-t="evidence">Evidence</button>
+      <i id="ink" aria-hidden="true"></i>
+    </nav>
+    <section id="panel" role="tabpanel" tabindex="0"></section>
+
+    <footer>
+      This tool does not predict outbreaks, count illnesses avoided, or judge any company. It is decision
+      support, not a regulatory determination, and it authorizes nothing. A qualified person reviews every
+      high-consequence decision. FSIS states its sampling data should not be used to identify outbreaks, link
+      samples to outbreaks, or show that samples are causally related.
+    </footer>
+  </main>
+</div>
+<div id="tip" role="status" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

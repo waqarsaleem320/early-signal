@@ -1,0 +1,36 @@
+Food Group Code,NDB,Yield Description,Preparation Method1,Cooking Yield %,n,SD,Yield Minimum %,Yield Maximum %,Moisture Gain/ Loss %,Fat   Gain/ Loss %,Release Year2
+5,5051.0,"Chicken, broiler-fryer, back, full, meat and skin","Baked or Roasted, unspecified",61.0,,,49.0,71.0,,,1975
+5,5052.0,"Chicken, broiler-fryer, back, full, meat and skin","Poached, Simmered or Stewed",67.0,,,58.0,79.0,,,1975
+5,5060.0,"Chicken, broiler-fryer, breast, meat and skin","Baked or Roasted, unspecified",72.0,,,61.0,82.0,,,1975
+5,5061.0,"Chicken, broiler-fryer, breast, meat and skin","Poached, Simmered or Stewed",77.0,,,70.0,88.0,,,1975
+5,5069.0,"Chicken, broiler-fryer, drumstick, meat and skin","Baked or Roasted, unspecified",76.0,,,63.0,87.0,,,1975
+5,5087.0,"Chicken, broiler-fryer, neck, meat and skin","Poached, Simmered or Stewed",70.0,,,62.0,81.0,,,1975
+5,5094.0,"Chicken, broiler-fryer, thigh, meat and skin","Baked or Roasted, unspecified",69.0,,,58.0,79.0,,,1975
+5,5095.0,"Chicken, broiler-fryer, thigh, meat and skin","Poached, Simmered or Stewed",74.0,,,67.0,82.0,,,1975
+5,5004.0,"Chicken, broiler-fryer, whole, including skin","Baked or Roasted, specified time",78.0,,,68.0,84.0,,,1975
+5,5010.0,"Chicken, broiler-fryer, whole, including skin","Poached, Simmered or Stewed",75.0,,,69.0,87.0,,,1975
+5,5104.0,"Chicken, broiler-fryer, wing, meat and skin","Poached, Simmered or Stewed",86.0,,,74.0,96.0,,,1975
+5,5102.0,"Chicken, broiler-fryer, wing, meat and skin, floured",Fried in deep fat,66.0,,,53.0,78.0,,,1975
+5,5676.0,"Chicken, broilers or fryers, drumstick, meat and skin",Braised,77.0,1.0,,,,-9.71,-0.21,2011
+5,5677.0,"Chicken, broilers or fryers, thigh, meat and skin",Braised,68.0,1.0,,,,-9.67,-2.44,2011
+5,5103.0,"Chicken, broilers or fryers, wing, meat and skin",Roasted,78.0,1.0,,,,2.45,3.55,2013
+5,5687.0,"Chicken, drumstick, meat and skin, enhanced",Braised,74.0,1.0,,,,-9.79,0.32,2013
+5,5689.0,"Chicken, dark meat, drumstick, meat and skin, enhanced",Roasted,80.0,1.0,,,,-7.58,-0.12,2013
+5,5690.0,"Chicken, thigh, meat and skin, enhanced",Braised,72.0,1.0,,,,-3.38,-0.23,2013
+5,5692.0,"Chicken, thigh, meat and skin, enhanced",Roasted,67.0,1.0,,,,-10.28,-2.17,2013
+5,5024.0,"Chicken, gizzard, all classes","Poached, Simmered or Stewed",55.0,1.0,,,,-41.91,-0.59,2003
+5,5661.0,"Chicken, liver, all classes",Pan-fried or Sauteed,62.0,4.0,1.247,61.14,63.83,-35.78,-0.83,2003
+5,5745.0,"Turkey, from whole, enhanced, back, meat and skin",Roasted,76.0,1.0,,,,-3.63,1.65,2013
+5,5701.0,"Turkey, from whole, enhanced, dark meat, meat and skin",Roasted,74.0,1.0,,,,-11.93,-1.35,2013
+5,5184.0,"Turkey, from whole, non-enhanced, dark meat, meat and skin",Roasted,69.0,1.0,,,,-23.07,-0.92,2013
+5,5172.0,"Turkey, all, giblets","Poached, Simmered or Stewed",64.0,1.0,,62.0,66.0,,,1975
+5,5174.0,"Turkey, gizzard, all classes","Poached, Simmered or Stewed",85.0,1.0,,,,-14.28,-1.29,2003
+5,5176.0,"Turkey, heart, all classes","Poached, Simmered or Stewed",76.0,1.0,,,,-21.73,-1.25,2003
+5,5178.0,"Turkey, liver, all classes","Poached, Simmered or Stewed",83.0,1.0,,,,-15.19,0.63,2003
+5,5731.0,"Turkey, retail parts, enhanced, breast, meat and skin",Roasted,68.0,1.0,,,,-16.96,-1.93,2013
+5,5733.0,"Turkey, retail parts, non-enhanced, breast, meat and skin",Roasted,72.0,1.0,,,,-13.77,-2.28,2013
+5,5737.0,"Turkey, retail parts, non-enhanced, drumstick, meat and skin",Roasted,72.0,1.0,,,,-12.97,0.47,2013
+5,5743.0,"Turkey, retail parts, non-enhanced, thigh, meat and skin",Roasted,83.0,1.0,,,,-10.86,-0.67,2013
+5,5735.0,"Turkey, retail parts, non-enhanced, wing, meat and skin",Roasted,71.0,1.0,,,,-9.57,-1.49,2013
+5,5707.0,"Turkey, whole, enhanced, meat and skin",Roasted,71.0,1.0,,,,-11.07,-1.55,2013
+5,5166.0,"Turkey, whole, non-enhanced, meat and skin",Roasted,71.0,1.0,,,,-11.29,0.18,2013

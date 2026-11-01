@@ -1,0 +1,263 @@
+{
+  "pbtResults": {
+    "1.2 Write property test for the exact status rule": {
+      "status": "passed",
+      "lastRunTimestamp": 1793481730806
+    }
+  },
+  "executionHistory": {
+    "1.1 Add the Situation fields, the SelfCheck type and the exact status rule": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064191
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480071388
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480435223
+      }
+    ],
+    "1.4 Implement `_distance` and `plant_self_check`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064304
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480437919
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480856228
+      }
+    ],
+    "1.10 Write boundary and example unit tests in `tests/test_decision.py`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064367
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481955975
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482521152
+      }
+    ],
+    "2. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064461
+      }
+    ],
+    "3.1 Update `expected_rate` in `src/decision/actions.py`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064518
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480943132
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481512254
+      }
+    ],
+    "3.5 Write precedence and fallback unit tests in `tests/test_decision.py`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064584
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482523625
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482757603
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064688
+      }
+    ],
+    "5.1 Add the sidebar inputs and pass them to `Situation`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064755
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480944138
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481513234
+      }
+    ],
+    "5.2 Render the self-check block in Section 1": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064819
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481957247
+      },
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482522721
+      }
+    ],
+    "6. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793480064880
+      }
+    ],
+    "1.2 Write property test for the exact status rule": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481529519
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481554152
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481817131
+      }
+    ],
+    "1.3 Write property test for agreement with `context._plant_status`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481530652
+      },
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481823404
+      }
+    ],
+    "1.5 Write property test for distance minimality": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481531805
+      }
+    ],
+    "1.6 Write property test for too-small sample counts": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481532638
+      }
+    ],
+    "1.7 Write property test for invalid counts": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481533811
+      }
+    ],
+    "1.8 Write property test for the disagreement note": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481535002
+      }
+    ],
+    "1.9 Write property test for message content": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481535804
+      }
+    ],
+    "3.2 Write property test for published precedence": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481537043
+      }
+    ],
+    "3.3 Write property test for Not listed using the rebuilt status": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481538204
+      }
+    ],
+    "3.4 Write property test for downstream consistency": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481539079
+      }
+    ],
+    "5.3 Write AppTest smoke test in `tests/test_app.py`": [
+      {
+        "executionId": "f80df06c-6c0d-4fe5-87ee-c258fda14221",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793481539930
+      }
+    ],
+    "1. Build the self-check engine in `src/decision/actions.py`": [
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482521221
+      }
+    ],
+    "5. Wire the Dashboard (`app/dashboard.py`, display only)": [
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482522784
+      }
+    ],
+    "3. Apply the self-check to the expected rate": [
+      {
+        "executionId": "34ceb808-80a7-460f-94df-8a58548981a7",
+        "chatSessionId": "sess_28c13961-085e-47ba-9234-75a64974f8d0",
+        "timestamp": 1793482757704
+      }
+    ]
+  }
+}

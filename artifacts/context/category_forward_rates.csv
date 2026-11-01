@@ -1,0 +1,16 @@
+product_group,category,plants,line_years,samples,positives,pct_positive_next_year,ci_low,ci_high,fsis_standard_pct
+Chicken carcass,1,160,352,16565,502,3.0,2.7,3.4,9.8
+Chicken carcass,2,97,136,6604,283,4.3,3.7,4.8,9.8
+Chicken carcass,3,47,85,2046,446,21.8,16.0,28.0,9.8
+Chicken parts,1,337,646,21867,1216,5.6,5.1,6.1,15.4
+Chicken parts,2,275,397,11714,1064,9.1,8.4,9.8,15.4
+Chicken parts,3,140,202,5158,899,17.4,15.3,19.6,15.4
+Ground chicken,1,13,19,494,67,13.6,10.0,19.4,25.0
+Ground chicken,2,23,30,894,190,21.3,17.4,26.5,25.0
+Ground chicken,3,29,53,1567,719,45.9,37.5,55.6,25.0
+Ground turkey,1,18,26,675,62,9.2,6.0,12.5,13.5
+Ground turkey,2,12,17,626,56,8.9,4.9,14.4,13.5
+Ground turkey,3,23,44,1580,411,26.0,19.4,32.0,13.5
+Turkey carcass,1,33,89,1748,4,0.2,0.1,0.5,7.1
+Turkey carcass,2,4,6,117,3,2.6,0.0,4.4,7.1
+Turkey carcass,3,1,1,23,1,4.3,4.3,4.3,7.1

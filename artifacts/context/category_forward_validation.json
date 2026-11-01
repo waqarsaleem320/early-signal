@@ -1,0 +1,13 @@
+{
+  "brier_own_last_year_rate": 0.06961,
+  "test_window_start": "2025-09-01",
+  "test_samples": 20976,
+  "test_line_years": 700,
+  "brier_product_only": 0.07487,
+  "brier_product_and_category": 0.0712,
+  "improvement_pct": 4.9,
+  "improvement_ci": [
+    3.4,
+    6.5
+  ]
+}

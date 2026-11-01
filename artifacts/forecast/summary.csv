@@ -1,0 +1,4 @@
+target,test_months,mae_seasonal,mae_persistence,mae_m0,mae_m1,m0_skill_vs_seasonal_pct,m1_vs_m0_pct,m1_vs_m0_ci,national_m1_gain_pct,national_gain_ci_pct,m1_vs_m0_pct_fsis_lag1
+Poultry-associated serotypes,56,8.54,8.67,6.36,6.41,25.6,-0.89,-0.117 to -0.001,-6.14,-14.3 to 1.2,-0.82
+Enteritidis,56,6.56,6.06,4.84,4.85,26.2,-0.2,-0.073 to 0.047,5.0,-5.1 to 14.4,-0.36
+All Salmonella,56,17.02,21.0,13.01,13.16,23.55,-1.11,-0.309 to -0.010,-3.99,-10.2 to 1.2,-1.56

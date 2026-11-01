@@ -1,0 +1,43 @@
+# Secrets — never commit real credentials
+.pytest_cache/
+.env
+.env.*
+!.env.examples
+**/.env
+!**/.env.examples
+
+
+# Transient build/run logs
+build_log.txt
+*_run.txt
+*_out.txt
+*_probe.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# Data caches / API pulls
+*.cache
+.cache/
+data_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Draft reports stay out of the repo
+report/*.docx
+report/*.pdf
+*_resized.png
+.coverage
+report/build_report.js
+report/make_numbers.py
+report/numbers.json
+report/refs.json

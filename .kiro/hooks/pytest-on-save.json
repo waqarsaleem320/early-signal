@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run tests on Python save",
+      "trigger": "PostFileSave",
+      "description": "When a .py file under src/, app/ or tests/ is saved, run the test suite and report failures.",
+      "matcher": "(^|[\\\\/])(src|app|tests)[\\\\/].*\\.py$",
+      "action": {
+        "type": "agent",
+        "prompt": "A Python file under src/, app/ or tests/ was just saved. From the workspace root, run `python -m pytest -q tests` using the project's Python 3.11 venv interpreter: `.\\.venv\\Scripts\\python.exe -m pytest -q tests` (the system `python` is 3.14 and lacks the pinned dependencies). Then report the result: if everything passes, say so in one line with the pass count. If anything fails or errors, list each failing test id with a one-line reason taken from the pytest output. Report only. Do not edit any file in src/, app/ or tests/, and do not try to fix the failures unless the user asks."
+      }
+    }
+  ]
+}
