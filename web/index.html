@@ -13,7 +13,7 @@
 <body>
 <div class="shell">
   <aside class="rail" aria-label="Lot details">
-    <div class="logo"><img src="logo.png" alt="" width="200" height="172">PoultryRescue</div>
+    <div class="logo"><img src="logo.png" alt="" width="200" height="172"><span>PoultryRescue</span><small>Forecast. Process safely. Feed people.</small></div>
     <form id="lot" autocomplete="off">
       <h2>This lot</h2>
       <label class="field">Plant state<select data-k="state" id="state"></select></label>
@@ -49,9 +49,13 @@
 
   <main>
     <header class="top">
-      <div class="examples"><span>Try a case</span><div id="examples"></div></div>
+      <div class="intro">
+        <h2>What should happen to this lot?</h2>
+        <p>Enter the lot details. The recommendation updates as you type.</p>
+      </div>
       <button class="print" id="print" type="button">Print hold tag</button>
     </header>
+    <div class="examples"><span>Try a case</span><div id="examples"></div></div>
 
     <section class="hero">
       <article class="tag" id="tag" aria-live="polite">
@@ -61,16 +65,16 @@
         <div class="gauge" role="img" id="gauge">
           <div class="readout" id="readout"></div>
           <div class="track"><i id="z1"></i><i id="z2"></i><i id="z3"></i>
-            <b class="pin" id="pin"></b><b class="pin own" id="pinOwn" hidden></b></div>
+            <s class="range" id="range" hidden></s><b class="pin" id="pin"></b><b class="pin own" id="pinOwn" hidden></b></div>
           <div class="scale"><span id="tickHalf"></span><span id="tickStd"></span></div>
           <div class="own" id="ownLabel" hidden></div>
         </div>
         <div class="printmeta" id="printmeta"></div>
       </article>
       <dl class="outcome" aria-label="Outcome of the recommended action">
-        <div><dt>Exposure index</dt><dd id="oExp"></dd><small>Chicken parts sold raw = 1.0</small></div>
-        <div><dt>Servings kept</dt><dd id="oServ"></dd><small id="oProt"></small></div>
-        <div><dt>Servings to high-need counties</dt><dd id="oNeed"></dd><small id="oNeedNote"></small></div>
+        <div class="o1"><dt>Exposure index</dt><dd id="oExp"></dd><small>Chicken parts sold raw = 1.0</small></div>
+        <div class="o2"><dt>Servings kept</dt><dd id="oServ"></dd><small id="oProt"></small></div>
+        <div class="o3"><dt>Servings to high-need counties</dt><dd id="oNeed"></dd><small id="oNeedNote"></small></div>
       </dl>
     </section>
 
@@ -78,6 +82,8 @@
       <button role="tab" data-t="why">Why this call</button>
       <button role="tab" data-t="compare">Compare options</button>
       <button role="tab" data-t="donate">Donated meals</button>
+      <button role="tab" data-t="map">State risk</button>
+      <button role="tab" data-t="cases">Worked scenarios</button>
       <button role="tab" data-t="evidence">Evidence</button>
       <i id="ink" aria-hidden="true"></i>
     </nav>

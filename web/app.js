@@ -6,6 +6,12 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};
 const num = n => Math.round(n).toLocaleString("en-US");
 const LEVEL = { Low: "var(--good)", Elevated: "var(--warn)", High: "var(--bad)" };
 const CAT = ["var(--good)", "var(--warn)", "var(--bad)"];
+const TILES = { AK: [0, 0], ME: [0, 11], WI: [1, 6], VT: [1, 10], NH: [1, 11], WA: [2, 1], ID: [2, 2], MT: [2, 3], ND: [2, 4],
+  MN: [2, 5], IL: [2, 6], MI: [2, 7], NY: [2, 9], MA: [2, 10], OR: [3, 1], NV: [3, 2], WY: [3, 3], SD: [3, 4], IA: [3, 5],
+  IN: [3, 6], OH: [3, 7], PA: [3, 8], NJ: [3, 9], CT: [3, 10], RI: [3, 11], CA: [4, 1], UT: [4, 2], CO: [4, 3], NE: [4, 4],
+  MO: [4, 5], KY: [4, 6], WV: [4, 7], VA: [4, 8], MD: [4, 9], DE: [4, 10], AZ: [5, 2], NM: [5, 3], KS: [5, 4], AR: [5, 5],
+  TN: [5, 6], NC: [5, 7], SC: [5, 8], DC: [5, 9], OK: [6, 4], LA: [6, 5], MS: [6, 6], AL: [6, 7], GA: [6, 8], HI: [7, 0],
+  TX: [7, 4], FL: [7, 9] };
 
 const D = await (await fetch("data.json")).json();
 const blank = { state: "MO", month: 7, product: "Ground chicken", lot_lb: 10000, fsis_category: 1,
@@ -89,7 +95,14 @@ function render() {
   if (own != null) { $("pinOwn").style.left = `${x(own)}%`; $("ownLabel").textContent = `Blue marker: your samples, ${own.toFixed(1)}%`; }
   $("tickHalf").style.left = `${x(std / 2)}%`; $("tickHalf").textContent = `Half ${std / 2}%`;
   $("tickStd").style.left = `${x(std)}%`; $("tickStd").textContent = `FSIS standard ${std}%`;
-  $("readout").innerHTML = `<b>${risk.pct.toFixed(1)}%</b> expected positive next year`;
+  // The interval comes from the same table as the rate, so it only shows for category-based rates.
+  const iv = interval(s, check, P.group);
+  $("range").hidden = !iv;
+  if (iv) { $("range").style.left = `${x(iv.ci_low)}%`; $("range").style.width = `${x(iv.ci_high - iv.ci_low)}%`; }
+  const near = iv && [std / 2, std].some(c => iv.ci_low <= c && c <= iv.ci_high);
+  $("readout").innerHTML = `<b>${risk.pct.toFixed(1)}%</b> expected positive next year` +
+    (iv ? `, 95% range ${iv.ci_low.toFixed(1)} to ${iv.ci_high.toFixed(1)}` : "") +
+    (near ? ` <span class="near">Borderline</span>` : "");
   $("gauge").setAttribute("aria-label", `Expected positivity ${risk.pct} percent, FSIS standard ${std} percent`);
   $("printmeta").textContent = `${s.product}, ${num(s.lot_lb)} lb, ${D.stateNames[s.state]}. Printed ` +
     `${new Date().toLocaleDateString("en-US")}. Decision support, not a regulatory determination. Reviewed by: ____________`;
@@ -104,6 +117,29 @@ function render() {
   $("panel").innerHTML = PANELS[ui.tab]();
 }
 
+function interval(s, check, group) {
+  const cat = s.fsis_category ?? (check && check.status), rows = s.fsis_category != null ? D.evidence.published : D.evidence.forward;
+  return cat ? rows.find(r => r.product_group === group && r.category === cat && r.ci_high > r.ci_low) : null;
+}
+
+function nextSteps(pick, s) {
+  const cooked = ["Confirm this product is covered by a validated cooked process in your HACCP plan.",
+    "Meet the 7-log10 lethality and stabilization requirements (9 CFR 381.150), or a validated equivalent.",
+    "Apply Listeria controls to ready-to-eat product (9 CFR 430)."];
+  const steps = {
+    "Release raw under normal HACCP": ["Release under normal HACCP controls and keep your records.", "Recheck your FSIS category when the next posting appears."],
+    "Release raw, add verification": ["Check that interventions on this line are running within their limits.", "Add verification sampling and record the results.",
+      "Enter your recent FSIS counts in the self-check to see how close the line is to the next category."],
+    "Hold and test, cook any positives": ["Hold the lot under establishment control.", "Get a quantified result before any release decision.",
+      "Send positives to a validated cooked process or another authorized route. One sample does not clear a large lot."],
+    "Redirect to validated cooked line": cooked,
+    "Redirect to cooked line, donate part": [...cooked, "Confirm capacity and cold chain with the receiving food organization."],
+    "Discard or render": ["Hold the lot and document the deviation in your HACCP records.", "Have your process authority confirm the disposition.", "Follow your plan for disposal or rendering."],
+  }[pick];
+  if (pick === "Release raw, add verification" && !s.has_cooked_line) steps.push("If risk stays high, ask a co-packer about a validated cook.");
+  return steps;
+}
+
 /* Tabs */
 const PANELS = {
   why() {
@@ -115,7 +151,10 @@ const PANELS = {
         (check.published_note ? `<p class="alert">${esc(check.published_note)}</p>` : "") +
         `<p class="note">${esc(E.SELF_CHECK_NOTE)}</p></div>`;
     }
-    return `<div class="grid2"><div class="plate"><h3>What drove this</h3><ul class="reasons">${
+    const todo = nextSteps(ui.ctx.pick, s).map(t => `<li>${esc(t)}</li>`).join("");
+    return `<div class="grid2"><div class="plate"><h3>Next steps</h3><ol class="steps">${todo}</ol>
+      <p class="note">For review by a qualified person. This tool authorizes nothing.</p></div>
+      <div class="plate"><h3>What drove this</h3><ul class="reasons">${
       risk.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
       <p class="note">Salmonella-positive raw poultry is generally not adulterated. The exception is the narrow
       2024 determination for raw breaded stuffed chicken, where FSIS verification sampling is delayed.</p></div>
@@ -152,6 +191,37 @@ const PANELS = {
       `<p class="note">Need combines CDC food insecurity (modeled, not in every state), CDC Social Vulnerability Index and USDA
       low-income, low-access share. Food organizations come from the IRS list, which misses many church pantries, so confirm
       capacity directly. Donated cooked product needs Listeria controls (9 CFR 430) and cold chain to the food bank.</p>`;
+  },
+  map() {
+    const states = Object.keys(D.live), alerts = states.filter(k => D.live[k].alert).sort((a, b) => D.live[b].outlook_ratio - D.live[a].outlook_ratio);
+    const tile = k => {
+      const L = D.live[k], [r, c] = TILES[k] || [];
+      if (!L || r == null) return "";
+      const t = Math.min(Math.max((L.outlook_ratio - .6) / 1, 0), 1), dark = t > .55;
+      return `<button type="button" class="tile${L.alert ? " hot" : ""}${k === ui.s.state ? " here" : ""}" data-state="${k}" style="grid-row:${r + 1};grid-column:${c + 1};background:color-mix(in srgb,#14506A ${Math.round(t * 100)}%,#E3EFF3);color:${dark ? "#fff" : "#12343B"}"
+        aria-label="${esc(D.stateNames[k])}: about ${Math.round(L.expected_cases)} cases, ratio ${L.outlook_ratio}${L.alert ? ", above alert level" : ""}" data-tip="${esc(D.stateNames[k])}: about ${Math.round(L.expected_cases)} cases, ${L.outlook_ratio} times the three-year average">${k}</button>`;
+    };
+    const list = alerts.length ? alerts.map(k => `<li><button type="button" class="link" data-state="${k}">${esc(D.stateNames[k])}</button><span>${D.live[k].outlook_ratio}x, about ${Math.round(D.live[k].expected_cases)} cases</span></li>`).join("")
+      : `<li>No state is above the alert level.</li>`;
+    const period = D.live[states[0]].period;
+    return `<h2>Poultry-associated human cases, ${esc(period)}</h2>
+      <p class="lead">Forecast cases against the same month over three years. Select a state to set it as the plant's state.</p>
+      <div class="mapwrap"><div class="plate"><div class="tiles">${states.concat().sort().map(tile).join("")}</div>
+        <div class="legend"><span>Below average</span><i></i><span>Above average</span><b>Red outline: above alert level</b></div></div>
+        <div class="plate"><h3>Alerts (${alerts.length})</h3><ul class="alerts">${list}</ul>
+        <p class="note">Context only. These do not change the risk level, because alert precision fell to ${(D.evidence.alertYears.at(-1).precision * 100).toFixed(1)}% in 2026. An alert is not an outbreak.</p></div></div>`;
+  },
+  cases() {
+    const rows = Object.entries(D.scenarios).map(([name, sc], i) => {
+      const s = { ...blank, ...sc, cfu_per_g: sc.cfu_per_g || null };
+      const r = E.riskLevel(s, D), [pick] = E.recommend(s, D), t = E.compareActions(s, D), c = t.find(x => x.action === pick);
+      return `<article class="case" style="--level:${LEVEL[r.level]}"><div class="lvl">${r.level} risk</div>
+        <h3>${esc(name.replace(/^\d+\. /, ""))}</h3><p class="act">${esc(pick)}</p>
+        <dl><dt>Expected positivity</dt><dd>${r.pct.toFixed(1)}%</dd><dt>Exposure, raw to chosen</dt><dd>${t[0].exposure_index.toFixed(2)} to ${c.exposure_index.toFixed(2)}</dd>
+        <dt>Servings kept</dt><dd>${num(c.servings_kept)}</dd><dt>To high-need counties</dt><dd>${num(c.servings_to_need)}</dd></dl>
+        <button type="button" class="chip" data-case="${i}">Open this case</button></article>`;
+    }).join("");
+    return `<p class="lead">Four illustrative lots, each scored on safety and food. Rates, yields and nutrition are measured.</p><div class="cases">${rows}</div>`;
   },
   evidence() {
     const e = D.evidence, t = e.publishedTest, g = e.alert.find(a => a.split === "test_2024_on");
@@ -215,8 +285,18 @@ tabs.forEach((b, i) => {
   };
 });
 
+$("panel").addEventListener("click", e => {
+  const st = e.target.closest?.("[data-state]"), cs = e.target.closest?.("[data-case]");
+  if (st) { ui.s.state = st.dataset.state; fillForm(); render(); }
+  if (cs) {
+    const sc = Object.values(D.scenarios)[Number(cs.dataset.case)];
+    ui.s = { ...blank, ...sc, cfu_per_g: sc.cfu_per_g || "" };
+    fillForm(); select("why"); scrollTo({ top: 0 });
+  }
+});
+
 $("panel").addEventListener("mousemove", e => {
-  const g = e.target.closest?.(".b"), tip = $("tip");
+  const g = e.target.closest?.(".b,.tile"), tip = $("tip");
   tip.hidden = !g;
   if (g) { tip.textContent = g.dataset.tip; tip.style.left = `${e.clientX + 12}px`; tip.style.top = `${e.clientY + 12}px`; }
 });

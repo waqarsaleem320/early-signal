@@ -33,7 +33,7 @@ time (Mujahid et al. 2023). Our literature and web search was not exhaustive.
    This is the route for lines with no published category. It is not an FSIS determination.
 3. Compares every action on exposure, servings kept, protein kept and servings for high-need counties.
 4. Lists high-need counties in the plant's state for donated cooked product.
-5. Shows a state outlook of human Salmonella cases as context. It does not change the risk level.
+5. Shows a state risk map and alerts for human Salmonella cases as context. They do not change the risk level.
 
 ## What it does not do
 
