@@ -19,7 +19,7 @@ button,input,select { font:inherit; color:inherit; }
 .rail { background:var(--night); color:#E6EFF1; padding:1.25rem 1.2rem 2rem; position:sticky; top:0; height:100vh; overflow-y:auto; }
 .logo { display:flex; align-items:center; gap:.6rem; font:800 1.4rem/1 var(--head); font-stretch:85%; margin-bottom:1.5rem; }
 .logo { flex-direction:column; align-items:flex-start; }
-.logo img { background:#fff; border-radius:8px; padding:4px; width:190px; height:auto; }
+.logo img { width:200px; height:auto; display:block; }
 .rail h2 { font-size:1.05rem; font-weight:700; margin-bottom:.8rem; color:var(--ice); }
 .field { display:block; font-size:.86rem; color:#C9D8DC; margin-bottom:.8rem; }
 .field input,.field select { display:block; width:100%; margin-top:.28rem; padding:.5rem .6rem; background:var(--night2);

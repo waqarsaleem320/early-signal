@@ -1,4 +1,4 @@
-<p align="center"><img src="web/logo.png" alt="Forecast, process safely, feed people" width="320"></p>
+<p align="center"><img src="web/logo.png" alt="PoultryRescue logo: forecast, process safely, feed people" width="260"></p>
 
 # PoultryRescue
 
