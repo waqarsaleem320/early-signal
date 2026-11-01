@@ -49,6 +49,7 @@ $("lot").addEventListener("input", e => {
 });
 $("lot").addEventListener("submit", e => e.preventDefault());
 $("print")?.addEventListener("click", () => window.print());
+$("liveChip").addEventListener("click", () => { select("live"); document.querySelector(".stick").scrollIntoView({ behavior: "smooth" }); });
 
 const SHORT = ["Category 3 ground chicken", "Category 1 breast", "Stuffed chicken over 1 CFU/g", "Storm outage"];
 Object.entries(D.scenarios).forEach(([name, sc], i) => {
@@ -65,6 +66,40 @@ function openCase(i) {
   fillForm();
   select("why");
   scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* Live feeds. Context only: nothing here reaches the engine or the risk level. */
+const live = { wx: {}, recalls: undefined };
+const getJSON = async u => {
+  const r = await fetch(u, { signal: AbortSignal.timeout(12000) });
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+};
+function paintLive() {
+  const k = ui.s.state, w = live.wx[k], chip = $("liveChip");
+  chip.hidden = !Array.isArray(w);
+  if (Array.isArray(w)) {
+    chip.textContent = `${w.length || "No"} active weather alert${w.length === 1 ? "" : "s"}, ${D.stateNames[k]}`;
+    chip.classList.toggle("hot", w.length > 0);
+  }
+  if (ui.tab === "live") $("panel").innerHTML = PANELS.live();
+}
+function loadWx(k) {
+  if (live.wx[k] !== undefined) return;
+  live.wx[k] = "loading";
+  getJSON(`https://api.weather.gov/alerts/active?area=${k}`)
+    .then(j => { live.wx[k] = j.features.map(f => f.properties); live.wxAt = new Date(); })
+    .catch(() => { live.wx[k] = "failed"; }).finally(paintLive);
+}
+function loadRecalls() {  // ponytail: the FSIS feed is about 13 MB, so it loads only when this tab opens
+  if (live.recalls !== undefined) return;
+  live.recalls = "loading";
+  getJSON("https://www.fsis.usda.gov/fsis/api/recall/v/1").then(j => {
+    const text = r => `${r.field_title} ${r.field_summary}`;
+    // Keep only dates and states: titles and summaries name companies.
+    live.recalls = j.filter(r => r.langcode === "English" && /salmonella/i.test(text(r)) && /chicken|turkey|poultry/i.test(text(r)))
+      .map(r => ({ year: Number(r.field_year), date: r.field_recall_date, states: r.field_states || "" }));
+  }).catch(() => { live.recalls = "failed"; }).finally(paintLive);
 }
 
 /* Count-up, in answer to a change the person made */
@@ -134,6 +169,7 @@ function render() {
 
   ui.ctx = { s, P, risk, pick, table, check };
   $("panel").innerHTML = PANELS[ui.tab]();
+  loadWx(s.state); paintLive();
 }
 
 function interval(s, check, group) {
@@ -227,6 +263,35 @@ const PANELS = {
       `<p class="note">Need combines CDC food insecurity (modeled, not in every state), CDC Social Vulnerability Index and USDA
       low-income, low-access share. Food organizations come from the IRS list, which misses many church pantries, so confirm
       capacity directly. Donated cooked product needs Listeria controls (9 CFR 430) and cold chain to the food bank.</p>`;
+  },
+  live() {
+    loadRecalls();
+    const k = ui.s.state, name = D.stateNames[k], w = live.wx[k], R = live.recalls;
+    const when = d => d ? new Date(d).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric" }) : "";
+    const down = (what, u, t) => `<p class="alert">${what} is not available right now. Check <a href="${u}">${t}</a>.</p>`;
+    let wx = `<p class="note">Loading.</p>`;
+    if (w === "failed") wx = down("The weather feed", "https://www.weather.gov/", "weather.gov");
+    else if (Array.isArray(w)) wx = !w.length ? `<p>No active National Weather Service alerts.</p>` :
+      `<ul class="wx">${w.slice(0, 8).map(a => `<li><b>${esc(a.event)}</b><span class="sev">${esc(a.severity)}</span>
+        <small>${a.ends || a.expires ? `Until ${esc(when(a.ends || a.expires))}. ` : ""}${esc(a.areaDesc)}</small></li>`).join("")}</ul>` +
+        (w.length > 8 ? `<p class="note">Showing 8 of ${w.length}.</p>` : "");
+    let rc = `<p class="note">Loading the FSIS recall list.</p>`;
+    if (R === "failed") rc = down("The FSIS recall list", "https://www.fsis.usda.gov/recalls", "FSIS recalls");
+    else if (Array.isArray(R)) {
+      const y = new Date().getFullYear(), years = [y - 4, y - 3, y - 2, y - 1, y].map(v => [v, R.filter(r => r.year === v).length]);
+      const top = Math.max(...years.map(a => a[1]), 1), recent = R.filter(r => r.year >= y - 4);
+      const here = recent.filter(r => /nationwide/i.test(r.states) || r.states.includes(name)).length;
+      const latest = recent.map(r => r.date).filter(Boolean).sort().at(-1);
+      rc = years.map(([v, n]) => `<div class="yr"><span>${v}</span><div class="needbar"><i style="width:${100 * n / top}%"></i></div><span>${n}</span></div>`).join("") +
+        `<p class="note">${here} of ${recent.length} listed ${esc(name)} or nationwide distribution.${latest ? ` Latest ${esc(latest)}.` : ""}
+        Counted by a text match, so some only mention Salmonella. Companies are not named here. <a href="https://www.fsis.usda.gov/recalls">Full list at FSIS</a>.</p>`;
+    }
+    return `<h2>Live now</h2>
+      <p class="lead">Current public data for ${esc(name)}. These feeds are context: they never change the risk level or the recommendation.</p>
+      <div class="grid2"><div class="plate"><h3>Weather alerts</h3>${wx}
+        <p class="note">If an alert affects power or refrigeration, check product temperature and enter the hours above 40°F in the lot form.
+        Source: National Weather Service${live.wxAt ? `, read ${esc(live.wxAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }))}` : ""}.</p></div>
+        <div class="plate"><h3>FSIS poultry notices mentioning Salmonella</h3>${rc}</div></div>`;
   },
   map() {
     const states = Object.keys(D.live), alerts = states.filter(k => D.live[k].alert).sort((a, b) => D.live[b].outlook_ratio - D.live[a].outlook_ratio);

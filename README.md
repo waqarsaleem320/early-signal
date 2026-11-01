@@ -35,6 +35,9 @@ time (Mujahid et al. 2023). Our literature and web search was not exhaustive.
 4. Lists high-need counties in the plant's state for donated cooked product.
 5. Shows a state risk map and alerts for human Salmonella cases as context. They do not change the risk level.
 
+The Live now tab reads National Weather Service alerts and the FSIS recall list in the browser. These feeds are
+context only: they never change the risk level or the recommendation, and the app shows recall counts without company names.
+
 ## What it does not do
 
 - It does not predict outbreaks or count illnesses avoided.
