@@ -1,5 +1,8 @@
 name: Publish app
 on:
+  push:
+    branches: [main]
+    paths: ["web/**"]
   workflow_dispatch:
 permissions:
   contents: read

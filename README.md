@@ -1,3 +1,5 @@
+<p align="center"><img src="web/logo.png" alt="Forecast, process safely, feed people" width="320"></p>
+
 # Early Signal
 
 Lot-level Salmonella decision support for the QA or HACCP lead at a small or very small ground poultry plant.
