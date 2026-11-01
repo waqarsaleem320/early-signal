@@ -57,6 +57,7 @@ main { padding:1.1rem clamp(1rem,3vw,2.4rem) 2rem; min-width:0; max-width:1260px
 .examples { margin-bottom:.9rem; display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; color:var(--steel); font-size:.86rem; }
 .examples div { display:flex; gap:.4rem; flex-wrap:wrap; }
 .chip { background:var(--plate); border:1px solid var(--line); border-radius:999px; padding:.28rem .75rem; font-size:.84rem; cursor:pointer; }
+.chip.on { background:var(--ink); border-color:var(--ink); color:#fff; }
 .chip:hover { border-color:var(--chill); color:var(--chill); }
 .print { flex:none; background:var(--ink); color:#fff; border:0; border-radius:6px; padding:.45rem .9rem; font-weight:500; cursor:pointer; }
 
@@ -113,7 +114,10 @@ main { padding:1.1rem clamp(1rem,3vw,2.4rem) 2rem; min-width:0; max-width:1260px
 /* Option rows */
 .opt { display:block; background:var(--plate); margin-bottom:6px; border-left:4px solid transparent; }
 .opt summary { list-style:none; margin:0; display:grid; grid-template-columns:minmax(190px,1.25fr) 1fr 1fr 110px 72px; gap:1rem; align-items:center; padding:.72rem 1rem; }
+.opt summary { cursor:pointer; }
 .opt summary::-webkit-details-marker { display:none; }
+.opt .name::before { content:"\25B8"; display:inline-block; margin-right:.4rem; color:var(--steel); transition:transform .15s; }
+.opt[open] .name::before { transform:rotate(90deg); }
 .opt.pick { border-left-color:var(--chill); }
 .opt.pick .name { font-weight:600; }
 .opt.pick .name::after { content:"Recommended"; display:inline-block; margin-left:.5rem; font-size:.74rem; font-weight:600; color:var(--chill); }
@@ -144,6 +148,11 @@ main { padding:1.1rem clamp(1rem,3vw,2.4rem) 2rem; min-width:0; max-width:1260px
 svg text { font-family:var(--body); fill:var(--ink); }
 .yr { display:grid; grid-template-columns:48px 1fr 54px; gap:.6rem; align-items:center; margin-bottom:.35rem; font-size:.9rem; }
 .yr .needbar i { background:var(--warn); }
+
+.hint { font-size:.82rem; color:var(--ice); margin:0 0 .6rem; }
+.facts { display:grid; grid-template-columns:1fr auto; gap:.15rem .7rem; margin:.4rem 0 .2rem; font-size:.9rem; }
+.facts dt { color:var(--steel); } .facts dd { margin:0; font-weight:600; text-align:right; }
+.gap2 { margin-top:1rem !important; }
 
 /* Next steps */
 .steps { margin:.4rem 0 0; padding-left:1.25rem; }

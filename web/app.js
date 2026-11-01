@@ -1,5 +1,5 @@
 // Interface only. Every decision comes from engine.js.
-import * as E from "./engine.js";
+import * as E from "./engine.js?v=__V__";
 
 const $ = id => document.getElementById(id);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
@@ -13,7 +13,7 @@ const TILES = { AK: [0, 0], ME: [0, 11], WI: [1, 6], VT: [1, 10], NH: [1, 11], W
   TN: [5, 6], NC: [5, 7], SC: [5, 8], DC: [5, 9], OK: [6, 4], LA: [6, 5], MS: [6, 6], AL: [6, 7], GA: [6, 8], HI: [7, 0],
   TX: [7, 4], FL: [7, 9] };
 
-const D = await (await fetch("data.json")).json();
+const D = await (await fetch("data.json?v=__V__")).json();
 const blank = { state: "MO", month: 7, product: "Ground chicken", lot_lb: 10000, fsis_category: 1,
   has_cooked_line: false, customer_limit: false, lot_result: "none", cfu_per_g: "", hours_above_40f: 0,
   max_hours_above_40f: E.DEFAULTS.maxHours, plant_samples: 0, plant_positives: 0 };
@@ -39,6 +39,7 @@ function fillForm() {
 
 $("lot").addEventListener("input", e => {
   const el = e.target, k = el.dataset.k;
+  ui.active = null;
   if (k) ui.s[k] = el.type === "checkbox" ? el.checked : el.type === "number" ? Number(el.value) : el.value;
   if (el.name === "fsis_category") ui.s.fsis_category = el.value ? Number(el.value) : null;
   if (el.name === "lot_result") ui.s.lot_result = el.value;
@@ -53,15 +54,25 @@ const SHORT = ["Category 3 ground chicken", "Category 1 breast", "Stuffed chicke
 Object.entries(D.scenarios).forEach(([name, sc], i) => {
   const b = document.createElement("button");
   b.className = "chip"; b.type = "button"; b.textContent = SHORT[i]; b.title = name;
-  b.onclick = () => { ui.s = { ...blank, ...sc, cfu_per_g: sc.cfu_per_g || "" }; fillForm(); render(); };
+  b.onclick = () => { openCase(i); };
   $("examples").append(b);
 });
+
+function openCase(i) {
+  const sc = Object.values(D.scenarios)[i];
+  ui.s = { ...blank, ...sc, cfu_per_g: sc.cfu_per_g || "" };
+  ui.active = i;
+  fillForm();
+  select("why");
+  scrollTo({ top: 0, behavior: "smooth" });
+}
 
 /* Count-up, in answer to a change the person made */
 function count(el, to, fmt) {
   const from = Number(el.dataset.v ?? to), t0 = performance.now();
   el.dataset.v = to;
   if (from === to || matchMedia("(prefers-reduced-motion:reduce)").matches) { el.textContent = fmt(to); return; }
+  setTimeout(() => { if (Number(el.dataset.v) === to) el.textContent = fmt(to); }, 360);  // final value even if frames are throttled
   (function step(t) {
     const p = Math.min((t - t0) / 320, 1), e = 1 - (1 - p) ** 3;
     el.textContent = fmt(from + (to - from) * e);
@@ -78,6 +89,8 @@ function render() {
   const check = E.selfCheck(s, D), own = check && check.status ? check.observed_pct : null;
 
   $("cfuField").hidden = s.product !== "Raw breaded stuffed chicken";
+  $("assumeNote").hidden = !!s.has_cooked_line;
+  document.querySelectorAll(".chip[title]").forEach((b, i) => { b.classList.toggle("on", i === ui.active); b.setAttribute("aria-pressed", i === ui.active); });
   $("donateOut").textContent = `${Math.round(ui.donate * 100)}%`;
   $("detectOut").textContent = `${Math.round(ui.detect * 100)}%`;
 
@@ -122,6 +135,15 @@ function interval(s, check, group) {
   return cat ? rows.find(r => r.product_group === group && r.category === cat && r.ci_high > r.ci_low) : null;
 }
 
+function stateCard(k) {
+  const L = D.live[k];
+  if (!L) return `<p class="note">No forecast for this state.</p>`;
+  const storm = D.storms[`${k}|${Number(L.period.slice(-2))}`] ?? 0;
+  return `<dl class="facts"><dt>Expected cases</dt><dd>${Math.round(L.expected_cases)}</dd><dt>80% range</dt><dd>${Math.round(L.low_80)} to ${Math.round(L.high_80)}</dd>
+    <dt>Three-year average</dt><dd>${Math.round(L.baseline_3y)}</dd><dt>Status</dt><dd>${L.alert ? "Above alert level" : "Within alert level"}</dd>
+    <dt>Storm months</dt><dd>${storm} of 12 years</dd></dl>`;
+}
+
 function nextSteps(pick, s) {
   const cooked = ["Confirm this product is covered by a validated cooked process in your HACCP plan.",
     "Meet the 7-log10 lethality and stabilization requirements (9 CFR 381.150), or a validated equivalent.",
@@ -152,10 +174,15 @@ const PANELS = {
         `<p class="note">${esc(E.SELF_CHECK_NOTE)}</p></div>`;
     }
     const todo = nextSteps(ui.ctx.pick, s).map(t => `<li>${esc(t)}</li>`).join("");
+    const notes = [];
+    if (s.lot_result === "negative") notes.push("A negative screen does not clear a lot, so it does not lower the risk level.");
+    if (!(s.lot_lb > 0)) notes.push("Enter a lot size to see servings and protein.");
+    if (s.has_cooked_line === false && ui.ctx.pick.startsWith("Release")) notes.push("Turn on Validated cooked line to compare redirect and donation options.");
+    const noteHtml = notes.map(n => `<p class="alert">${esc(n)}</p>`).join("");
     return `<div class="grid2"><div class="plate"><h3>Next steps</h3><ol class="steps">${todo}</ol>
       <p class="note">For review by a qualified person. This tool authorizes nothing.</p></div>
       <div class="plate"><h3>What drove this</h3><ul class="reasons">${
-      risk.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
+      risk.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>${noteHtml}
       <p class="note">Salmonella-positive raw poultry is generally not adulterated. The exception is the narrow
       2024 determination for raw breaded stuffed chicken, where FSIS verification sampling is delayed.</p></div>
       ${self}<div class="plate"><h3>${esc(D.stateNames[s.state])}, ${esc(L.period)}</h3>
@@ -208,7 +235,7 @@ const PANELS = {
       <p class="lead">Forecast cases against the same month over three years. Select a state to set it as the plant's state.</p>
       <div class="mapwrap"><div class="plate"><div class="tiles">${states.concat().sort().map(tile).join("")}</div>
         <div class="legend"><span>Below average</span><i></i><span>Above average</span><b>Red outline: above alert level</b></div></div>
-        <div class="plate"><h3>Alerts (${alerts.length})</h3><ul class="alerts">${list}</ul>
+        <div class="plate"><h3>${esc(D.stateNames[ui.s.state])}</h3>${stateCard(ui.s.state)}<h3 class="gap2">Alerts (${alerts.length})</h3><ul class="alerts">${list}</ul>
         <p class="note">Context only. These do not change the risk level, because alert precision fell to ${(D.evidence.alertYears.at(-1).precision * 100).toFixed(1)}% in 2026. An alert is not an outbreak.</p></div></div>`;
   },
   cases() {
@@ -287,12 +314,8 @@ tabs.forEach((b, i) => {
 
 $("panel").addEventListener("click", e => {
   const st = e.target.closest?.("[data-state]"), cs = e.target.closest?.("[data-case]");
-  if (st) { ui.s.state = st.dataset.state; fillForm(); render(); }
-  if (cs) {
-    const sc = Object.values(D.scenarios)[Number(cs.dataset.case)];
-    ui.s = { ...blank, ...sc, cfu_per_g: sc.cfu_per_g || "" };
-    fillForm(); select("why"); scrollTo({ top: 0 });
-  }
+  if (st) { ui.s.state = st.dataset.state; ui.active = null; $("tip").hidden = true; fillForm(); render(); }
+  if (cs) openCase(Number(cs.dataset.case));
 });
 
 $("panel").addEventListener("mousemove", e => {
@@ -301,7 +324,18 @@ $("panel").addEventListener("mousemove", e => {
   if (g) { tip.textContent = g.dataset.tip; tip.style.left = `${e.clientX + 12}px`; tip.style.top = `${e.clientY + 12}px`; }
 });
 $("panel").addEventListener("mouseleave", () => $("tip").hidden = true);
-addEventListener("resize", () => select(ui.tab));
+$("panel").addEventListener("focusin", e => {
+  const g = e.target.closest?.(".b,.tile"), tip = $("tip");
+  if (!g) return;
+  const r = g.getBoundingClientRect();
+  tip.textContent = g.dataset.tip; tip.hidden = false; tip.style.left = `${r.left}px`; tip.style.top = `${r.bottom + 6}px`;
+});
+$("panel").addEventListener("focusout", () => $("tip").hidden = true);
+function moveInk() {
+  const b = document.querySelector('.tabs button[aria-selected="true"]');
+  if (b) { $("ink").style.left = `${b.offsetLeft}px`; $("ink").style.width = `${b.offsetWidth}px`; }
+}
+addEventListener("resize", moveInk);
 
 fillForm();
 await document.fonts?.ready;

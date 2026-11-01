@@ -16,6 +16,8 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Stamp file versions
+        run: sed -i "s/__V__/${GITHUB_SHA::8}/g" web/index.html web/app.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web

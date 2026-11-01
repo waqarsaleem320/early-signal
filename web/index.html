@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@85,500;85,700;85,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="icon" type="image/png" href="logo.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=__V__">
 </head>
 <body>
 <div class="shell">
@@ -41,6 +41,7 @@
       </details>
       <details>
         <summary>Change the assumptions</summary>
+        <p class="hint" id="assumeNote" hidden>These change the options that use a cooked line. Turn on Validated cooked line to use them.</p>
         <label class="field">Share donated after cooking <output id="donateOut"></output><input id="donate" type="range" min="0" max="100" step="5"></label>
         <label class="field">Positives the test finds <output id="detectOut"></output><input id="detect" type="range" min="50" max="100" step="5"></label>
       </details>
@@ -98,6 +99,6 @@
   </main>
 </div>
 <div id="tip" role="status" hidden></div>
-<script type="module" src="app.js"></script>
+<script type="module" src="app.js?v=__V__"></script>
 </body>
 </html>
