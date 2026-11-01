@@ -128,6 +128,10 @@ function render() {
   $("oProt").textContent = `${num(chosen.protein_kg)} kg protein`;
   $("oNeedNote").textContent = chosen.servings_to_need ? `${Math.round(ui.donate * 100)}% of the lot after a validated cook` : "This action sends none";
 
+  $("oNeed").parentElement.classList.toggle("zero", !chosen.servings_to_need);
+  $("mini").style.setProperty("--level", LEVEL[risk.level]);
+  $("mini").innerHTML = `<b>${esc(risk.level)} risk</b> ${esc(pick)}`;
+
   ui.ctx = { s, P, risk, pick, table, check };
   $("panel").innerHTML = PANELS[ui.tab]();
 }
@@ -202,7 +206,7 @@ const PANELS = {
     const bar = (v, m, t, l) => `<span class="bar" data-l="${l}"><i style="width:${Math.round(70 * v / m)}px"></i>${t}</span>`;
     return `<p class="lead">Every option on the same outcomes. Select a row for its conditions.</p>
       <div class="opthead"><span>Option</span><span>Exposure index</span><span>Servings kept</span><span>To high-need counties</span><span>Food lost</span></div>` +
-      table.map(r => `<details class="opt ${r.action === pick ? "pick" : r.feasible ? "" : "no"}"><summary>
+      [...table].sort((a, b) => (b.feasible || b.action === pick) - (a.feasible || a.action === pick)).map(r => `<details class="opt ${r.action === pick ? "pick" : r.feasible ? "" : "no"}"><summary>
         <span class="name">${esc(r.action)}${r.feasible ? "" : " (not possible here)"}</span>
         ${bar(r.exposure_index, mE, r.exposure_index.toFixed(2), "Exposure index")}${bar(r.servings_kept, mS, num(r.servings_kept), "Servings kept")}
         <span data-l="To high-need counties">${num(r.servings_to_need)}</span><span data-l="Food lost">${Math.round(r.food_lost_pct)}%</span></summary><p>${esc(r.note)}</p></details>`).join("") +
@@ -214,10 +218,10 @@ const PANELS = {
     const rows = E.donationTargets(s.state, D, donated);
     return `<p class="lead">${donated ? `${num(donated)} servings could reach the highest-need counties in ${esc(D.stateNames[s.state])}.`
       : `Highest-need counties in ${esc(D.stateNames[s.state])}. Turn on a validated cooked line to plan a donation.`}</p>` +
-      rows.map(r => `<div class="county"><div><b>${esc(r.county)}</b>
+      rows.map(r => `<div class="county${donated ? "" : " plan"}"><div><b>${esc(r.county)}</b>
         <small>${r.food_insecure_pct != null ? `${r.food_insecure_pct}% of adults food insecure` : "No CDC estimate here"}</small></div>
         <div><small>Need score ${r.need_score.toFixed(2)}</small><div class="needbar"><i style="width:${r.need_score * 100}%"></i></div></div>
-        <div><b>${num(r.servings)}</b><small>servings</small></div>
+        ${donated ? `<div><b>${num(r.servings)}</b><small>servings</small></div>` : ""}
         <div>${r.food_orgs ? `${r.food_orgs} food org${r.food_orgs > 1 ? "s" : ""} listed<small>Largest: ${esc(r.largest_food_org)}</small>`
           : `<span class="gap">No food org listed</span><small>Find a local partner first</small>`}</div></div>`).join("") +
       `<p class="note">Need combines CDC food insecurity (modeled, not in every state), CDC Social Vulnerability Index and USDA
@@ -261,7 +265,7 @@ const PANELS = {
     const high = e.persistence.find(p => p.high), low = e.persistence.find(p => !p.high);
     return `<h2>A plant's FSIS category predicts its next year</h2>
       <p class="lead">Share of FSIS routine samples positive after a line received each published category. Hover or focus a bar for counts.</p>
-      <div class="plate">${chart(e.published.filter(r => r.product_group !== "Turkey carcass"))}</div>
+      <div class="plate">${chart(e.published.filter(r => r.product_group !== "Turkey carcass"), ui.ctx.P.group, ui.ctx.s.fsis_category)}</div>
       <p class="note">Four archived FSIS postings, 2022 to 2025, scored on the samples that followed each one. Whiskers show 95% intervals
       that resample plants. Few Category 1 and 2 ground lines qualify, so those rates are less certain.</p>
       <div class="stats">
@@ -279,20 +283,20 @@ const PANELS = {
   },
 };
 
-function chart(rows) {
-  const groups = [...new Set(rows.map(r => r.product_group))], W = 250, H = 240, base = H - 26, top = 34;
+function chart(rows, mine, cat) {
+  const groups = [...new Set(rows.map(r => r.product_group))].sort((a, b) => (b === mine) - (a === mine)), W = 250, H = 240, base = H - 26, top = 34;
   const max = Math.ceil(Math.max(...rows.map(r => r.ci_high)) / 10) * 10, y = v => base - (base - top) * v / max;
   return `<div class="charts">` + groups.map(g => {
     const rs = rows.filter(r => r.product_group === g), std = rs[0].fsis_standard_pct, bw = 46;
     const bars = rs.map((r, j) => {
       const cx = 48 + j * 77, v = r.pct_positive_next_year;
       const tip = `${esc(g)}, Category ${r.category}: ${v}% positive. ${r.plants} plants, ${num(r.samples)} samples`;
-      return `<g class="b" data-tip="${tip}" tabindex="0" role="img" aria-label="${tip}"><rect x="${cx - bw / 2}" y="${y(v)}" width="${bw}" height="${base - y(v)}" rx="3" fill="${CAT[r.category - 1]}"/>
+      return `<g class="b" data-tip="${tip}" tabindex="0" role="img" aria-label="${tip}"><rect x="${cx - bw / 2}" y="${y(v)}" width="${bw}" height="${base - y(v)}" rx="3" fill="${CAT[r.category - 1]}" fill-opacity="${g === mine && cat && cat !== r.category ? .3 : 1}"/>
         <path d="M${cx} ${y(r.ci_low)}V${y(r.ci_high)}M${cx - 4} ${y(r.ci_low)}h8M${cx - 4} ${y(r.ci_high)}h8" stroke="#12343B" fill="none"/>
         <text x="${cx}" y="${y(r.ci_high) - 6}" text-anchor="middle" font-size="14" font-weight="600">${Math.round(v)}%</text>
         <text x="${cx}" y="${base + 18}" text-anchor="middle" font-size="13">Cat ${r.category}</text></g>`;
     }).join("");
-    return `<figure><figcaption>${esc(g)}<small>FSIS standard ${std}%, dotted line</small></figcaption>
+    return `<figure class="${g === mine ? "mine" : ""}"><figcaption>${esc(g)}${g === mine ? ` <em>Your lot</em>` : ""}<small>FSIS standard ${std}%, dotted line</small></figcaption>
       <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(g)} next-year positivity by FSIS category">
       <line x1="6" x2="${W - 6}" y1="${base}" y2="${base}" stroke="#D3DDE0"/>${bars}
       <line x1="6" x2="${W - 6}" y1="${y(std)}" y2="${y(std)}" stroke="#12343B" stroke-dasharray="3 4"/></svg></figure>`;
@@ -342,6 +346,8 @@ function moveInk() {
   if (b) { $("ink").style.left = `${b.offsetLeft}px`; $("ink").style.width = `${b.offsetWidth}px`; }
 }
 addEventListener("resize", moveInk);
+
+new IntersectionObserver(([e]) => { $("mini").hidden = e.isIntersecting; }).observe(document.querySelector(".hero"));
 
 fillForm();
 await document.fonts?.ready;
