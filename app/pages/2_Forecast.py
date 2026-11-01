@@ -1,4 +1,4 @@
-"""Early Signal — Next-month forecast (Streamlit page).
+"""PoultryRescue — Next-month forecast (Streamlit page).
 
 Run from the project root (appears in the sidebar):
     streamlit run app/dashboard.py
@@ -30,7 +30,7 @@ from app import theme  # noqa: E402
 
 from src import beam, forecast, geo, ingest_local  # noqa: E402
 
-st.set_page_config(page_title="Early Signal — Forecast", page_icon="📈", layout="wide")
+st.set_page_config(page_title="PoultryRescue — Forecast", page_icon="📈", layout="wide")
 theme.inject()
 st.html(
     """

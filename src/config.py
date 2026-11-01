@@ -1,4 +1,4 @@
-"""Centralized, secure configuration for the Early Signal (SENS-D) pipeline.
+"""Centralized, secure configuration for the PoultryRescue (SENS-D) pipeline.
 
 Security guardrail (Step 1): API credentials are NEVER hardcoded. Every token
 is pulled at runtime via os.getenv() after loading the local `.env` file with

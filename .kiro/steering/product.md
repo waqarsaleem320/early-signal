@@ -1,6 +1,6 @@
 # Product
 
-Early Signal helps a small or very small ground poultry plant decide what to do with a lot.
+PoultryRescue helps a small or very small ground poultry plant decide what to do with a lot.
 The user is the plant's QA or HACCP lead. A qualified person reviews every high-consequence decision.
 
 - Never name a plant in any output.

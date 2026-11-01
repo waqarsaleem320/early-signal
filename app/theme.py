@@ -74,7 +74,7 @@ def inject() -> None:
 
 
 def brand() -> None:
-    st.markdown("<div class='brand'><b>Early Signal</b><span>Salmonella lot decisions for small "
+    st.markdown("<div class='brand'><b>PoultryRescue</b><span>Salmonella lot decisions for small "
                 "ground poultry plants</span></div>", unsafe_allow_html=True)
 
 

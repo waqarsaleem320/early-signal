@@ -1,4 +1,4 @@
-# Streamlit configuration for Early Signal (local + Streamlit Community Cloud).
+# Streamlit configuration for PoultryRescue (local + Streamlit Community Cloud).
 
 [theme]
 primaryColor = "#2B7A9E"

@@ -1,4 +1,4 @@
-"""Early Signal — Hotspot Map (Streamlit page).
+"""PoultryRescue — Hotspot Map (Streamlit page).
 
 Run from the project root (the page appears in the sidebar next to the main
 dashboard):
@@ -33,7 +33,7 @@ from app import theme  # noqa: E402
 
 from src import fsis_raw, geo, ingest_local  # noqa: E402
 
-st.set_page_config(page_title="Early Signal — Hotspot Map", page_icon="🗺️", layout="wide")
+st.set_page_config(page_title="PoultryRescue — Hotspot Map", page_icon="🗺️", layout="wide")
 theme.inject()
 
 st.html(

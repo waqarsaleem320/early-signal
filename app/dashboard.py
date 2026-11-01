@@ -1,4 +1,4 @@
-"""Early Signal: lot decision page for a small or very small ground poultry plant.
+"""PoultryRescue: lot decision page for a small or very small ground poultry plant.
 
 Run from the project root:  streamlit run app/dashboard.py
 Needs artifacts from:       python run_all.py
@@ -27,7 +27,7 @@ FSIS_NOTE = ("FSIS states its sampling data are informational and should not be 
              "This tool is decision support, not a regulatory determination. A qualified person "
              "must review every high-consequence decision.")
 
-st.set_page_config(page_title="Early Signal", page_icon="🐔", layout="wide")
+st.set_page_config(page_title="PoultryRescue", page_icon="🐔", layout="wide")
 theme.inject()
 
 
