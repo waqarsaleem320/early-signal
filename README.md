@@ -12,8 +12,8 @@ NAFSI Hub Student Data Challenge, Fall 2026, Sens-D track.
 A plant whose ground poultry line is sliding toward the FSIS Category 3 standard has to decide what
 to do before results get worse, without wasting protein. In the September 2026 FSIS posting, 21 of 37
 categorized ground chicken lines were in Category 3, compared with 48 of 436 chicken parts lines. Of
-those 37 lines, 29 are at small or very small plants (only one is very small), as are 76 of the 98 Category 3 lines across all
-products (MPI directory sizes). Another 122 ground chicken lines have no published category, so the
+those 37 lines, 29 are at small or very small plants (one very small). Across all products, 76 of the 98 Category 3
+lines are at small or very small plants (MPI directory sizes). Another 122 ground chicken lines have no published category, so the
 tool falls back to the national rate for them.
 
 ## What is new
@@ -22,7 +22,7 @@ To our knowledge, this is the first public-data test of how well a plant's publi
 category predicts its next-year positivity, and the first tool that scores lot actions on both exposure and
 food delivered to high-need counties. Plant-level persistence research and test-driven lot software
 already exist, and one study found Category 3 linked to higher positivity in retail samples at the same
-time (Mujahid et al. 2023). Our literature and web search was not exhaustive.
+time (Mujahid et al. 2023, *Life* 13(3):642, https://doi.org/10.3390/life13030642). Our literature and web search was not exhaustive.
 
 ## What the tool does
 
@@ -82,7 +82,7 @@ the self-check uses rebuilt rates.
 
 Tested on Python 3.11.9 on Windows.
 
-```bash
+```bat
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
@@ -110,6 +110,7 @@ On macOS or Linux, use `source .venv/bin/activate`. `run_all.py` takes about 5 m
 | `src/scenarios.py` | Four worked scenarios |
 | `artifacts/` | Generated results |
 | `tests/` | Rule, arithmetic and app-load checks |
+| `report/` | Figures and diagrams used in the written report |
 | `DATA_DICTIONARY.md` | Source, access date, license, coverage, changes and limits for each dataset |
 
 ## Known limits
@@ -138,7 +139,7 @@ On macOS or Linux, use `source .venv/bin/activate`. `run_all.py` takes about 5 m
 
 ## Credits
 
-Team Early Signal: Javonte Carter, Muhammad Waqar Saleem, Friederike Albrecht, Blessing, Nafisa Habib Purba.
+Team Early Signal: Javonte Carter, Muhammad Waqar Saleem, Friederike Albrecht, Blessing Ademola, Nafisa Habib Purba.
 
 Tooling disclosure: AI coding assistants helped write and review this code.
 `.kiro/` holds steering and spec files. See `.kiro/README.md` for how they were made.

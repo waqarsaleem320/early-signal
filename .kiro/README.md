@@ -21,6 +21,4 @@ Manual changes and review:
 - `test_self_check_block_renders` in `tests/test_app.py` was added with an AI coding assistant.
 - An AI coding assistant added the rule that worse own samples raise the risk level one step, with a test.
 
-Team: add anything else you do in Kiro below.
-
 Not built in Kiro: the `web/` app and the published-category test were built with an AI coding assistant.
