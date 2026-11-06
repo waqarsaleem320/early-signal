@@ -8,6 +8,7 @@ NAFSI Hub Student Data Challenge, Fall 2026, Sens-D track.
 **[Open the app](https://waqarsaleem320.github.io/early-signal/).** Its code is in [`web/`](web). Its results come from [`artifacts/`](artifacts), built by `python run_all.py` from [`data/`](data).
 
 Final report: [PoultryRescue_Final_Report.pdf](PoultryRescue_Final_Report.pdf)
+Team science statement (one page): [Team_Science_Statement_Early_Signal.pdf](Team_Science_Statement_Early_Signal.pdf)
 
 ## The problem
 
